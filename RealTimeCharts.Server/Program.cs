@@ -1,10 +1,21 @@
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using RealTimeCharts.Server.HubConfig;
+using RealTimeCharts.Server.Models.config;
+using RealTimeCharts.Server.Services;
 using RealTimeCharts.Server.TimerFeatures;
+using TalkBack.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.Configure<UsersDBSettings>(
+    builder.Configuration.GetSection(nameof(UsersDBSettings)));
+builder.Services.AddSingleton<IUsersDBSettings>(
+    sp => sp.GetRequiredService<IOptions<UsersDBSettings>>().Value);
+builder.Services.AddSingleton<IMongoClient>(
+    sp => new MongoClient(builder.Configuration.GetValue<string>("UsersDBSettings:ConnectionString")));
+builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
