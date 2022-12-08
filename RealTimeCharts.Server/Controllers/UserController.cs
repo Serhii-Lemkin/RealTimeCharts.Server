@@ -60,5 +60,18 @@ namespace RealTimeCharts.Server.Controllers
             userservice.DeleteUser(tmp.Id);
             _hub.Clients.All.SendAsync("activeUsers", userservice.Get());
         }
+        [HttpPost]
+        [Route("upd")]
+        public void Update([FromBody] string userName)
+        {
+            var tmp = userservice.GetByUserName(userName);
+            if (tmp == null) return;
+            userservice.UpdateUser(userName, tmp);
+        }
+        [HttpGet("{code}")]
+        public ActionResult<User> UserByCode(string code)
+        {
+            return userservice.GetUserByCode(code);
+        }
     }
 }

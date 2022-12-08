@@ -53,7 +53,10 @@ namespace RealTimeCharts.Server.Services
             _users.ReplaceOne(u => u.Id == user.Id, user);
         }
 
-        
+        public User GetUserByCode(string code)
+        {
+            return _users.Find(user => user.PersonalCode == code).FirstOrDefault();
+        }
     }
 }
 

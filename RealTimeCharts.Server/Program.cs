@@ -49,5 +49,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<ChartHub>("/chart");
+app.MapHub<InviteHub>("/invitehub");
 
 app.Run();
