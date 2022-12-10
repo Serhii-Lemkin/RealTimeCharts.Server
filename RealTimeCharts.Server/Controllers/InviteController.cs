@@ -26,9 +26,15 @@ namespace RealTimeCharts.Server.Controllers
         {
             User user = userservice.GetUserByCode(code);
             _hub.Clients.All.SendAsync(username, user.UserName);
-            return Ok("sent to => " + user.UserName);
+            return Ok(user);
+        }
+        [HttpPost("react/{username}")]
+        public ActionResult<User> ReactToInvite(string username, [FromBody] string responce)
+        {
+            User u = userservice.GetByUserName(username);
+            _hub.Clients.All.SendAsync(u.PersonalCode, responce);
+            return Ok(u);
         }
 
-        
     }
 }

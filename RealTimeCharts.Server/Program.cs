@@ -34,13 +34,13 @@ builder.Services.AddSingleton<TimerManager>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseCors("CorsPolicy");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
@@ -50,5 +50,6 @@ app.MapControllers();
 
 app.MapHub<ChartHub>("/chart");
 app.MapHub<InviteHub>("/invitehub");
+app.MapHub<MessageHub>("/messagehub");
 
 app.Run();
