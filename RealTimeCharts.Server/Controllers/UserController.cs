@@ -19,7 +19,7 @@ namespace RealTimeCharts.Server.Controllers
         }
         [HttpPost]
         [Route("reg")]
-        public IActionResult Post([FromBody] string userName)
+        public async Task<IActionResult> Post([FromBody] string userName)
         {
 
             if (!userservice.CheckIfAvailable(userName))
@@ -33,8 +33,8 @@ namespace RealTimeCharts.Server.Controllers
                 PersonalCode = Guid.NewGuid().ToString(),
             });
             var newUser = userservice.GetByUserName(userName);
-            _hub.Clients.All.SendAsync(userName, newUser);
-            _hub.Clients.All.SendAsync("activeUsers", userservice.Get());
+            await _hub.Clients.All.SendAsync(userName, newUser);
+            await _hub.Clients.All.SendAsync("activeUsers", userservice.Get());
             return Ok(new { Message = "Request Completed" });
         }
         [HttpGet]
@@ -54,17 +54,17 @@ namespace RealTimeCharts.Server.Controllers
         }
         [HttpPost]
         [Route("logout")]
-        public void Logout([FromBody] string userName)
+        public async void Logout([FromBody] string userName)
         {
             var tmp = userservice.GetByUserName(userName);
             userservice.DeleteUser(tmp.Id);
-            _hub.Clients.All.SendAsync("activeUsers", userservice.Get());
+            await _hub.Clients.All.SendAsync("activeUsers", userservice.Get());
         }
         [HttpPost]
         [Route("upd")]
         public void Update([FromBody] string userName)
         {
-            var tmp = userservice.GetByUserName(userName);
+            var tmp =  userservice.GetByUserName(userName);
             if (tmp == null) return;
             userservice.UpdateUser(userName, tmp);
         }

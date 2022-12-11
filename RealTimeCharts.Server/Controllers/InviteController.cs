@@ -22,17 +22,17 @@ namespace RealTimeCharts.Server.Controllers
 
         // POST api/<InviteController>
         [HttpPost("{username}")] 
-        public ActionResult<User> Post(string username, [FromBody] string code)
+        public async Task<ActionResult<User>> Post(string username, [FromBody] string code)
         {
             User user = userservice.GetUserByCode(code);
-            _hub.Clients.All.SendAsync(username, user.UserName);
+            await _hub.Clients.All.SendAsync(username, user.UserName);
             return Ok(user);
         }
         [HttpPost("react/{username}")]
-        public ActionResult<User> ReactToInvite(string username, [FromBody] string responce)
+        public async Task<ActionResult<User>> ReactToInvite(string username, [FromBody] string responce)
         {
             User u = userservice.GetByUserName(username);
-            _hub.Clients.All.SendAsync(u.PersonalCode, responce);
+            await _hub.Clients.All.SendAsync(u.PersonalCode, responce);
             return Ok(u);
         }
 
