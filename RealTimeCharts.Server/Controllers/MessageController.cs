@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using RealTimeCharts.Server.HubConfig;
+using RealTimeCharts.Server.Models;
 using RealTimeCharts.Server.Services;
 
 namespace RealTimeCharts.Server.Controllers
@@ -17,6 +18,12 @@ namespace RealTimeCharts.Server.Controllers
         {
             _hub = hub;
             this.userservice = userservice;
+        }
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Message message) {
+            if(message == null) return BadRequest(string.Empty);
+            await _hub.Clients.All.SendAsync(message.Code, message);
+            return Ok();
         }
     }
 }
