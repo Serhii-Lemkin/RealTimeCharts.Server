@@ -25,5 +25,15 @@ namespace RealTimeCharts.Server.Controllers
             await _hub.Clients.All.SendAsync(message.Code, message);
             return Ok();
         }
+        [HttpPost("ttt")]
+        public async Task<IActionResult> StartTTT([FromBody] GameInitModel action)
+        {
+            if (action.Action == "start")
+            {
+                await _hub.Clients.All.SendAsync(action.Code, action.Action);
+                return Ok("Game Started");
+            }
+            return BadRequest(string.Empty);
+        }
     }
 }

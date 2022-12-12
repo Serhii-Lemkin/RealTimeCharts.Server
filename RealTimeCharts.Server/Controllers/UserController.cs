@@ -19,23 +19,23 @@ namespace RealTimeCharts.Server.Controllers
         }
         [HttpPost]
         [Route("reg")]
-        public async Task<IActionResult> Post([FromBody] string userName)
+        public async Task<ActionResult<User>> Post([FromBody] string userName)
         {
 
             if (!userservice.CheckIfAvailable(userName))
             {
                 return Ok(new { Message = "UserName Taken" });
             }
-            userservice.AddNew(new User()
+            var newUser = new User()
             {
                 UserName = userName,
                 LastRequest = DateTime.Now.ToUniversalTime(),
                 PersonalCode = Guid.NewGuid().ToString(),
-            });
-            var newUser = userservice.GetByUserName(userName);
-            await _hub.Clients.All.SendAsync(userName, newUser);
+            };
+            userservice.AddNew(newUser);
+            //await _hub.Clients.All.SendAsync(userName, newUser);
             await _hub.Clients.All.SendAsync("activeUsers", userservice.Get());
-            return Ok(new { Message = "Request Completed" });
+            return Ok(newUser);
         }
         [HttpGet]
         public ActionResult<List<User>> Get()

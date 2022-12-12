@@ -51,5 +51,6 @@ app.MapControllers();
 app.MapHub<ChartHub>("/chart");
 app.MapHub<InviteHub>("/invitehub");
 app.MapHub<MessageHub>("/messagehub");
+app.MapHub<TicTacToeHub>("/ticktacktoehub");
 
 app.Run();
