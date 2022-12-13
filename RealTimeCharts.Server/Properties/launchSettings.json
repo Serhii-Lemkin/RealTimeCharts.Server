@@ -5,7 +5,8 @@
       "launchBrowser": true,
 
       "environmentVariables": {
-        "ASPNETCORE_CLIENTURL": "http://localhost:4200",
+        //"ASPNETCORE_CLIENTURL": "http://localhost:4200",
+        "ASPNETCORE_CLIENTURL": "https://polite-plant-0bbb5ae10.2.azurestaticapps.net",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -13,7 +14,8 @@
       "commandName": "Project",
       "launchBrowser": false,
       "environmentVariables": {
-        "ASPNETCORE_CLIENTURL": "http://localhost:4200",
+        //"ASPNETCORE_CLIENTURL": "http://localhost:4200",
+        "ASPNETCORE_CLIENTURL": "https://polite-plant-0bbb5ae10.2.azurestaticapps.net",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
