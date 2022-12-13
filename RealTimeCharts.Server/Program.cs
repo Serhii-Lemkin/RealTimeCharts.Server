@@ -24,7 +24,7 @@ builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", builder => builder
-        .WithOrigins("http://localhost:4200")
+        .WithOrigins(Environment.GetEnvironmentVariable("ASPNETCORE_CLIENTURL")!)
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials());

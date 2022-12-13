@@ -20,8 +20,9 @@ namespace RealTimeCharts.Server.Controllers
             this.userservice = userservice;
         }
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Message message) {
-            if(message == null) return BadRequest(string.Empty);
+        public async Task<IActionResult> Post([FromBody] Message message)
+        {
+            if (message == null) return BadRequest(string.Empty);
             await _hub.Clients.All.SendAsync(message.Code, message);
             return Ok();
         }
@@ -31,7 +32,7 @@ namespace RealTimeCharts.Server.Controllers
             if (action.Action == "start")
             {
                 await _hub.Clients.All.SendAsync(action.Code, action.Action);
-                return Ok("Game Started");
+                return Ok();
             }
             return BadRequest(string.Empty);
         }

@@ -33,7 +33,6 @@ namespace RealTimeCharts.Server.Controllers
                 PersonalCode = Guid.NewGuid().ToString(),
             };
             userservice.AddNew(newUser);
-            //await _hub.Clients.All.SendAsync(userName, newUser);
             await _hub.Clients.All.SendAsync("activeUsers", userservice.Get());
             return Ok(newUser);
         }
@@ -64,7 +63,7 @@ namespace RealTimeCharts.Server.Controllers
         [Route("upd")]
         public void Update([FromBody] string userName)
         {
-            var tmp =  userservice.GetByUserName(userName);
+            var tmp = userservice.GetByUserName(userName);
             if (tmp == null) return;
             userservice.UpdateUser(userName, tmp);
         }
