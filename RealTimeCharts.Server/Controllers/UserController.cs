@@ -24,7 +24,7 @@ namespace RealTimeCharts.Server.Controllers
 
             if (!userservice.CheckIfAvailable(userName))
             {
-                return Ok(new { Message = "UserName Taken" });
+                return Ok("UserName Taken");
             }
             var newUser = new User()
             {

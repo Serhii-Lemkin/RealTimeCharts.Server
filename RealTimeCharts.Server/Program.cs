@@ -5,8 +5,10 @@ using RealTimeCharts.Server.Models.config;
 using RealTimeCharts.Server.Services;
 using RealTimeCharts.Server.TimerFeatures;
 using TalkBack.Models;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.Configure<UsersDBSettings>(
@@ -23,8 +25,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", builder => builder
-        .WithOrigins(Environment.GetEnvironmentVariable("ASPNETCORE_CLIENTURL")!)
+options.AddPolicy("CorsPolicy", builder => builder
+    .SetIsOriginAllowed(origin => true)
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials());
@@ -35,6 +37,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseCors("CorsPolicy");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
