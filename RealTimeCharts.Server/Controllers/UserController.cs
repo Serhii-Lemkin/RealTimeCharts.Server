@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using RealTimeCharts.Server.HubConfig;
 using RealTimeCharts.Server.Models;
@@ -19,7 +20,7 @@ namespace RealTimeCharts.Server.Controllers
         }
         [HttpPost]
         [Route("reg")]
-        public async Task<ActionResult<User>> Post([FromBody] string userName)
+        public ActionResult<User> Post([FromBody] string userName)
         {
 
             if (!userservice.CheckIfAvailable(userName))
@@ -33,22 +34,14 @@ namespace RealTimeCharts.Server.Controllers
                 PersonalCode = Guid.NewGuid().ToString(),
             };
             userservice.AddNew(newUser);
-            await _hub.Clients.All.SendAsync("activeUsers", userservice.Get());
+            _hub.Clients.All.SendAsync("activeUsers", userservice.Get());
             return Ok(newUser);
         }
-        [HttpGet]
+        [HttpGet, Authorize]
         public ActionResult<List<User>> Get()
         {
             var allUsers = userservice.Get();
-            foreach (var u in allUsers)
-            {
-                DateTime tmpdt = DateTime.Now.ToUniversalTime();
-                if ((tmpdt - u.LastRequest).TotalMinutes > 15)
-                {
-                    userservice.DeleteUser(u.Id);
-                }
-
-            }
+            DateTime tmpdt = DateTime.Now.ToUniversalTime();
             return Ok(allUsers);
         }
         [HttpPost]

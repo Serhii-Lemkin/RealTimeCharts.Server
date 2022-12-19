@@ -16,5 +16,10 @@ namespace RealTimeCharts.Server.Models
         public DateTime LastRequest { get; set; }
         [BsonElement("personalCode")]
         public string PersonalCode { get; set; }
+        [BsonElement("passwordHash")]
+        public byte[] PasswordHash { get; set; }
+        [BsonElement("passwordSalt")]
+        public byte[] PasswordSalt { get; set; }
+        
     }
 }
