@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using RealTimeCharts.Server.HubConfig;
 using RealTimeCharts.Server.Models;
@@ -8,7 +9,7 @@ using RealTimeCharts.Server.Services;
 
 namespace RealTimeCharts.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), Authorize]
     [ApiController]
     public class InviteController : ControllerBase
     {

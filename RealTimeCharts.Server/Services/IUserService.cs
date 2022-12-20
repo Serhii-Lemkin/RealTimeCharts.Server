@@ -12,5 +12,6 @@ namespace RealTimeCharts.Server.Services
         void UpdateUser(string id, User user);
         void DeleteUser(string id);
         bool CheckIfAvailable(string username);
+        public List<User> GetActive();
     }
 }

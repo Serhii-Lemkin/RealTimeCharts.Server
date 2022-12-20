@@ -1,17 +1,22 @@
 ﻿using MongoDB.Driver;
 using RealTimeCharts.Server.Models;
 using TalkBack.Models;
+using MongoDB.Bson;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RealTimeCharts.Server.Services
 {
 
     public class UserService : IUserService
     {
+        private readonly MongoClient _client;
         readonly IMongoCollection<User> _users;
 
         public UserService(IUsersDBSettings settings, IMongoClient mongoClient)
         {
-            _users = mongoClient
+            _client = new MongoClient(settings.ConnectionString);
+            _users = _client
                 .GetDatabase(settings.DataBaseName)
                 .GetCollection<User>(settings.CollectionName);
         }
@@ -37,7 +42,7 @@ namespace RealTimeCharts.Server.Services
         => _users.ReplaceOne(user => user.Id == id, user);
 
         public bool CheckIfAvailable(string username)
-        {
+         {
             var tmpUser = _users.Find(user => user.UserName == username).FirstOrDefault();
             if (tmpUser == null) return true; 
             if ((DateTime.Now - tmpUser.LastRequest).Minutes > 15)
@@ -56,6 +61,19 @@ namespace RealTimeCharts.Server.Services
         public User GetUserByCode(string code)
         {
             return _users.Find(user => user.PersonalCode == code).FirstOrDefault();
+        }
+
+        public List<User> GetActive()
+        {
+            var allUsers = Get();
+            allUsers.Where(x => (DateTime.Now.ToUniversalTime() - x.LastRequest).TotalMinutes < 5)
+                .ToList();
+            allUsers.ForEach(x =>
+            {
+                x.PasswordHash = new byte[1];
+                x.PasswordSalt = new byte[1];
+            });
+            return allUsers;
         }
     }
 }
