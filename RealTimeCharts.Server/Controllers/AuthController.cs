@@ -32,7 +32,7 @@ namespace RealTimeCharts.Server.Controllers
 
             User user = new User {
                 UserName = request.UserName,
-                LastRequest = DateTime.Now.ToUniversalTime(),
+                LastRequest = DateTime.Now.AddHours(-1).ToUniversalTime(),
                 PersonalCode = Guid.NewGuid().ToString(),
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt

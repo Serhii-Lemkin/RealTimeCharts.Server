@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using RealTimeCharts.Server.HubConfig;
@@ -8,7 +9,7 @@ using RealTimeCharts.Server.Services;
 namespace RealTimeCharts.Server.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class MessageController : ControllerBase
     {
         private IHubContext<MessageHub> _hub;

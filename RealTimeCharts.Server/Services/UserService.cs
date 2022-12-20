@@ -62,6 +62,19 @@ namespace RealTimeCharts.Server.Services
         {
             return _users.Find(user => user.PersonalCode == code).FirstOrDefault();
         }
+
+        public List<User> GetActive()
+        {
+            var allUsers = Get();
+            allUsers.Where(x => (DateTime.Now.ToUniversalTime() - x.LastRequest).TotalMinutes < 5)
+                .ToList();
+            allUsers.ForEach(x =>
+            {
+                x.PasswordHash = new byte[1];
+                x.PasswordSalt = new byte[1];
+            });
+            return allUsers;
+        }
     }
 }
 
